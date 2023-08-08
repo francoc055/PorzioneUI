@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace Entidades
 {
-    public delegate string MensajeError(string msg);
     public class ConexionProducto : IConexionApi<Producto>
     {
         HttpClient client;
@@ -18,11 +18,12 @@ namespace Entidades
             client = new HttpClient();
         }
 
-        public bool Add(Producto entity, string url)
+        public bool Add(Producto entity, string url, string jwt)
         {
             try
             {
-                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
                 JsonObject json = new JsonObject()
                 {
                     {"nombreProducto", entity.NombreProducto}
@@ -37,10 +38,8 @@ namespace Entidades
             }
             catch (Exception e)
             {
-                MensajeError delegado = Mensaje;
-                delegado.Invoke("Hubo un error");
+                Console.WriteLine(e.Message);
             }
-            
 
             return true;
         }
@@ -50,9 +49,9 @@ namespace Entidades
             return mensaje;
         }
 
-        public List<Producto> GetAll(string url)
+        public List<Producto> GetAll(string url, string jwt)
         {
-            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
             HttpResponseMessage response = client.GetAsync(url).Result;//obtengo la respuesta
 
             string resultado = response.Content.ReadAsStringAsync().Result; //leo el json y lo deserializo
@@ -62,9 +61,9 @@ namespace Entidades
             return body;
         }
 
-        public bool Remove(string url)
+        public bool Remove(string url, string jwt)
         {
-            client.DefaultRequestHeaders.Clear();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
             HttpResponseMessage response = client.DeleteAsync(url).Result;
             if(response.StatusCode != System.Net.HttpStatusCode.NoContent)
@@ -74,9 +73,25 @@ namespace Entidades
             return true;
         }
 
-        public bool Update(Producto entity, string url)
+        public bool Update(Producto entity, string url, string jwt)
         {
-            throw new NotImplementedException();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
+            JsonObject jsonObject = new()
+            {
+                { "id", entity.Id },
+                { "nombreProducto", entity.NombreProducto }
+            };
+
+            StringContent content = new StringContent(jsonObject.ToString(), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = client.PutAsync(url, content).Result;
+
+            if (response.StatusCode != System.Net.HttpStatusCode.NoContent)
+                return false;
+
+            return true;
         }
+
     }
 }

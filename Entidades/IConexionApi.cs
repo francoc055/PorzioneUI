@@ -8,12 +8,12 @@ namespace Entidades
 {
     public interface IConexionApi<T> where T : class
     {
-        List<T> GetAll(string url);
+        List<T> GetAll(string url, string jwt);
 
-        bool Add(T entity, string url);
+        bool Add(T entity, string url, string jwt);
 
-        bool Remove(string url);
+        bool Remove(string url, string jwt);
 
-        bool Update(T entity, string url);
+        bool Update(T entity, string url, string jwt);
     }
 }

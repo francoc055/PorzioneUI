@@ -19,3 +19,4 @@ C:\Users\PC\Desktop\porzione\porzioneUI\obj\Debug\net6.0-windows\refint\porzione
 C:\Users\PC\Desktop\porzione\porzioneUI\obj\Debug\net6.0-windows\porzioneUI.pdb
 C:\Users\PC\Desktop\porzione\porzioneUI\obj\Debug\net6.0-windows\porzioneUI.genruntimeconfig.cache
 C:\Users\PC\Desktop\porzione\porzioneUI\obj\Debug\net6.0-windows\ref\porzioneUI.dll
+C:\Users\PC\Desktop\porzione\porzioneUI\obj\Debug\net6.0-windows\porzioneUI.FrmLogin.resources

@@ -9,19 +9,23 @@ namespace porzioneUI
         ConexionProducto conexionProducto;
         string url;
         int page;
-        public FrmAdmin()
+        string token;
+
+        public FrmAdmin(AutorizacionResponse autorizacion)
         {
             InitializeComponent();
             productos = new List<Producto>();
             conexionProducto = new ConexionProducto();
             url = "http://localhost:5109/api/Producto";
             page = 1;
+            token = autorizacion.Token;
         }
 
         private void FrmAdmin_Load(object sender, EventArgs e)
         {
             CargarDataGrid(ref page);
-
+            btnEditar.Enabled = false;
+            btnEliminar.Enabled = false;
         }
 
         private void dataGridViewProductos_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -68,11 +72,10 @@ namespace porzioneUI
         //HTTP GET
         private void CargarDataGrid(ref int page)
         {
-            productos = conexionProducto.GetAll($"http://localhost:5109/api/Producto?page={page}&pageSize=5");
+            productos = conexionProducto.GetAll($"http://localhost:5109/api/Producto?page={page}&pageSize=5", token);
             dataGridViewProductos.DataSource = productos;
         }
 
-        //HTTP POST
         private void btnAgregar_Click(object sender, EventArgs e)
         {
             btnGuardar.Enabled = true;
@@ -82,28 +85,44 @@ namespace porzioneUI
             btnEditar.Enabled = false;
         }
 
+        //HTTP POST
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             Producto modelo = new() { NombreProducto = txtNombreProducto.Text };
 
-            if (conexionProducto.Add(modelo, url))
+            if (conexionProducto.Add(modelo, url, token))
             {
                 MessageBox.Show("Producto creado con exito!");
             }
+
+            RestablecerUrl();
+            CargarDataGrid(ref page);
         }
 
+        //PUT
         private void btnEditar_Click(object sender, EventArgs e)
         {
+            Producto modelo = new() { Id = int.Parse(txtId.Text), NombreProducto = txtNombreProducto.Text };
+            url += $"/{txtId.Text}";
+            if (conexionProducto.Update(modelo, url, token))
+            {
+                MessageBox.Show("Actualizado con exito");
+            }
 
+            RestablecerUrl();
+            CargarDataGrid(ref page);
         }
 
+        //DELETE
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             url += $"/{txtId.Text}";
-            if(conexionProducto.Remove(url))
+            if (conexionProducto.Remove(url, token))
             {
                 MessageBox.Show("Eliminado con exito");
             }
+            RestablecerUrl();
+            CargarDataGrid(ref page);
         }
 
         //----PAGINACION----//
@@ -132,5 +151,10 @@ namespace porzioneUI
         }
         //----PAGINACION----//
 
+
+        private void RestablecerUrl()
+        {
+            url = "http://localhost:5109/api/Producto"; 
+        }  
     }
 }

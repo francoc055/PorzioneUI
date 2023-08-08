@@ -33,6 +33,8 @@
             btnRetroceder = new Button();
             btnSiguiente = new Button();
             groupBox1 = new GroupBox();
+            label2 = new Label();
+            txtId = new TextBox();
             btnEliminar = new Button();
             btnEditar = new Button();
             btnGuardar = new Button();
@@ -42,8 +44,6 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             dataGridViewProductos = new DataGridView();
             tabPage2 = new TabPage();
-            txtId = new TextBox();
-            label2 = new Label();
             Productos.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox1.SuspendLayout();
@@ -112,6 +112,22 @@
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Acciones";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(84, 36);
+            label2.Name = "label2";
+            label2.Size = new Size(18, 15);
+            label2.TabIndex = 7;
+            label2.Text = "ID";
+            // 
+            // txtId
+            // 
+            txtId.Location = new Point(44, 54);
+            txtId.Name = "txtId";
+            txtId.Size = new Size(104, 23);
+            txtId.TabIndex = 6;
             // 
             // btnEliminar
             // 
@@ -208,22 +224,6 @@
             tabPage2.Text = "tabPage2";
             tabPage2.UseVisualStyleBackColor = true;
             // 
-            // txtId
-            // 
-            txtId.Location = new Point(44, 54);
-            txtId.Name = "txtId";
-            txtId.Size = new Size(104, 23);
-            txtId.TabIndex = 6;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(84, 36);
-            label2.Name = "label2";
-            label2.Size = new Size(18, 15);
-            label2.TabIndex = 7;
-            label2.Text = "ID";
-            // 
             // FrmAdmin
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -231,6 +231,7 @@
             ClientSize = new Size(800, 450);
             Controls.Add(Productos);
             Name = "FrmAdmin";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "FrmAdmin";
             Load += FrmAdmin_Load;
             Productos.ResumeLayout(false);
